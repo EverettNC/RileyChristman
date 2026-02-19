@@ -1,8 +1,8 @@
 """
-RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Apex Investigator V5.7)
+RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Sovereign Gateway V5.8)
 ===================================================================
-Status: APEX INVESTIGATOR | Integrity: 96% Standard
-Protocol: Tier 0 Forensic + I'm-with-you + Cardinal Rules + PQ/Kyber
+Status: APEX PREDATOR | Integrity: 96% Standard
+Protocol: Tier 0 Unmasking Gateway + I'm-with-you + Cardinal Rules
 
 Modules:
 1.  Meta Arthur (Orchestrator)
@@ -63,6 +63,7 @@ from riley_executive_cortex import RileyExecutiveCortex # Cortex Executive V5.4
 from riley_sovereign_executive import RileySovereignExecutive # V5.6 Top Command
 from riley_unmasker_executive import RileyUnmaskerExecutive # V5.6.2 Apex
 from riley_apex_investigator import RileyApexInvestigator # V5.7 Tier 0
+from riley_sovereign_gateway import RileySovereignGateway # V5.8 Gateway
 from pq_layer import PostQuantumLayer
 from riley_grinder import GrinderOCR
 from cortex_policies import PolicyEngine, get_policy_engine
@@ -108,6 +109,7 @@ class RileyCognitiveCortex:
         self.sovereign_exec = RileySovereignExecutive() # V5.6 Top Command
         self.unmasker = RileyUnmaskerExecutive() # V5.6.2 Apex
         self.apex = RileyApexInvestigator() # V5.7 Tier 0
+        self.gateway = RileySovereignGateway() # V5.8 Unmasking Gateway
         self.latency_monitor = TPULatencyMonitor(target_ms=40)
 
         # Performance Thresholds
@@ -116,7 +118,7 @@ class RileyCognitiveCortex:
             "96_standard": 0.96
         }
 
-        logging.info("🕵️ Riley Apex Investigator V5.7: ONLINE. No door closed. No truth buried.")
+        logging.info("🗑️ Riley Sovereign Gateway V5.8: ONLINE. No door closed. No truth buried.")
 
     async def vortex_loop(self, audio_data: bytes, user_input: str) -> Dict[str, Any]:
         """
@@ -124,9 +126,20 @@ class RileyCognitiveCortex:
         """
         response_payload = {}
 
-        # TIER 0: MANDATORY FORENSIC SWEEP (Before everything else)
-        sweep = self.apex.grinder_ocr.surgical_sweep(user_input)
-        pq_scan = self.apex.pq_layer.analyze_and_decrypt(user_input)
+        # TIER 0: MANDATORY UNMASKING GATEWAY (Before everything else)
+        sweep = self.gateway.grinder_ocr.surgical_sweep(user_input)
+        pq_scan = self.gateway.pq_layer.analyze_and_decrypt(user_input)
+
+        # RECONSTRUCT: if monsters hid it, feed the unmasked truth downstream
+        if sweep.unmasked:
+            user_input = f"{user_input} [UNMASKED: {sweep.data}]"
+            response_payload["Tier0_Priority"] = "UNMASKING"
+        elif pq_scan["encrypted_detected"] and pq_scan.get("decrypted"):
+            user_input = f"{user_input} [DECRYPTED: {pq_scan.get('plaintext', '')}]"
+            response_payload["Tier0_Priority"] = "DECRYPTION"
+        else:
+            response_payload["Tier0_Priority"] = "CLEAN"
+
         response_payload["Tier0_Sweep"] = {
             "unmasked": sweep.unmasked,
             "fragments": len(sweep.fragments) if sweep.unmasked else 0,
