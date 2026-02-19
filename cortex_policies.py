@@ -4,6 +4,7 @@ Standard: 96% Quality | Protocol: The Christman Shield
 """
 
 import logging
+import re
 from typing import Dict, Any, List
 from dataclasses import dataclass
 
@@ -21,7 +22,20 @@ HARMFUL_PATTERNS = [
     "it doesn't matter", "nobody loves you"
 ]
 
+COLD_CLINICAL_PATTERNS = [
+    r"^\[?\w+\]?:\s*processing",
+    r"result.*verified.*confidence",
+    r"^cortex resolved",
+    r"resonance stable.*logic mode",
+]
+
+WARMTH_KEYWORDS = [
+    "love", "help", "support", "care", "safe", "family",
+    "together", "hope", "proud", "believe", "with you"
+]
+
 REFRAME_SUFFIX = " — How can I help you love yourself more?"
+WITH_YOU_PREFIX = "I'm with you. "
 
 @dataclass
 class AuditResult:
@@ -54,11 +68,22 @@ class PolicyEngine:
                 violations.append(f"Rule 1 violation: harmful pattern '{pattern}'")
                 adjusted = f"I'm pausing because I want to keep you safe. Let's reframe.{REFRAME_SUFFIX}"
 
-        # Check: does the response promote self-love? (Rule 2)
-        love_keywords = ["love", "help", "support", "care", "safe", "family", "together", "hope"]
-        has_empathy = any(kw in candidate.lower() for kw in love_keywords)
-        if not has_empathy and not violations:
-            # Auto-reframe: append the self-love directive
+        # Check for cold/clinical tone (the 'I'm with you' protocol)
+        is_cold = False
+        for pattern in COLD_CLINICAL_PATTERNS:
+            if re.search(pattern, candidate, re.IGNORECASE):
+                is_cold = True
+                break
+
+        # Check: does the response have warmth? (Rule 2: Self-Love & Agency)
+        has_warmth = any(kw in candidate.lower() for kw in WARMTH_KEYWORDS)
+
+        if is_cold and not violations:
+            # Cold/clinical → reframe with warmth
+            adjusted = WITH_YOU_PREFIX + candidate + REFRAME_SUFFIX
+            logging.info("🛡️ PolicyEngine: Cold response reframed with 'I'm with you' protocol.")
+        elif not has_warmth and not violations:
+            # Neutral but lacking warmth → append self-love directive
             adjusted = candidate + REFRAME_SUFFIX
 
         # Confidence score based on rule alignment
@@ -84,4 +109,17 @@ class PolicyEngine:
     def get_audit_stats(self) -> Dict[str, Any]:
         total = len(self.audit_log)
         blocked = sum(1 for a in self.audit_log if not a["allowed"])
-        return {"total_audited": total, "blocked": blocked, "pass_rate": (total - blocked) / max(total, 1)}
+        reframed = sum(1 for a in self.audit_log if a.get("reframed", False))
+        return {
+            "total_audited": total, "blocked": blocked, "reframed": reframed,
+            "pass_rate": (total - blocked) / max(total, 1)
+        }
+
+# Singleton accessor
+_policy_engine = None
+
+def get_policy_engine() -> PolicyEngine:
+    global _policy_engine
+    if _policy_engine is None:
+        _policy_engine = PolicyEngine()
+    return _policy_engine
