@@ -196,5 +196,37 @@
       "intensity": 0.75
     },
     "timestamp": 1771509346.356386
+  },
+  {
+    "event": "Hilbert Witness: Everett | state=101 | v=0.50",
+    "metadata": {
+      "state_id": "550db3bdf931d5a1",
+      "intensity": 0.75
+    },
+    "timestamp": 1771509601.7383811
+  },
+  {
+    "event": "Hilbert Witness: Everett | state=101 | v=0.50",
+    "metadata": {
+      "state_id": "d4d1f1eebfe5fa2d",
+      "intensity": 0.75
+    },
+    "timestamp": 1771509601.7407901
+  },
+  {
+    "event": "Hilbert Witness: Everett | state=101 | v=0.50",
+    "metadata": {
+      "state_id": "bc8c35b6a0ec50e8",
+      "intensity": 0.75
+    },
+    "timestamp": 1771509601.742028
+  },
+  {
+    "event": "Hilbert Witness: Everett | state=101 | v=0.50",
+    "metadata": {
+      "state_id": "a90827a3f8666b91",
+      "intensity": 0.75
+    },
+    "timestamp": 1771509601.743999
   }
 ]

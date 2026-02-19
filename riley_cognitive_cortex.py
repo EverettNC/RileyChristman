@@ -1,8 +1,8 @@
 """
-RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Apex Investigator V5.6.2)
-=====================================================================
+RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Apex Investigator V5.7)
+===================================================================
 Status: APEX INVESTIGATOR | Integrity: 96% Standard
-Protocol: I'm-with-you + Cardinal Rules + Anti-Erasure + PQ/Kyber
+Protocol: Tier 0 Forensic + I'm-with-you + Cardinal Rules + PQ/Kyber
 
 Modules:
 1.  Meta Arthur (Orchestrator)
@@ -62,6 +62,7 @@ from riley_ferrari_mesh import RileyFerrariMesh # Ferrari V5.2 Fleet
 from riley_executive_cortex import RileyExecutiveCortex # Cortex Executive V5.4
 from riley_sovereign_executive import RileySovereignExecutive # V5.6 Top Command
 from riley_unmasker_executive import RileyUnmaskerExecutive # V5.6.2 Apex
+from riley_apex_investigator import RileyApexInvestigator # V5.7 Tier 0
 from pq_layer import PostQuantumLayer
 from riley_grinder import GrinderOCR
 from cortex_policies import PolicyEngine, get_policy_engine
@@ -105,7 +106,8 @@ class RileyCognitiveCortex:
         self.policy = get_policy_engine() # Shared Cardinal Rules
         self.visual = VisualCortex() # Carbon-Silicon HUD
         self.sovereign_exec = RileySovereignExecutive() # V5.6 Top Command
-        self.unmasker = RileyUnmaskerExecutive() # V5.6.2 Apex Investigator
+        self.unmasker = RileyUnmaskerExecutive() # V5.6.2 Apex
+        self.apex = RileyApexInvestigator() # V5.7 Tier 0
         self.latency_monitor = TPULatencyMonitor(target_ms=40)
 
         # Performance Thresholds
@@ -114,13 +116,27 @@ class RileyCognitiveCortex:
             "96_standard": 0.96
         }
 
-        logging.info("🗑️ Riley Apex Investigator V5.6.2: ONLINE. The truth is no longer optional.")
+        logging.info("🕵️ Riley Apex Investigator V5.7: ONLINE. No door closed. No truth buried.")
 
     async def vortex_loop(self, audio_data: bytes, user_input: str) -> Dict[str, Any]:
         """
         Input -> Hear -> Feel -> Witness -> Research -> Respond
         """
         response_payload = {}
+
+        # TIER 0: MANDATORY FORENSIC SWEEP (Before everything else)
+        sweep = self.apex.grinder_ocr.surgical_sweep(user_input)
+        pq_scan = self.apex.pq_layer.analyze_and_decrypt(user_input)
+        response_payload["Tier0_Sweep"] = {
+            "unmasked": sweep.unmasked,
+            "fragments": len(sweep.fragments) if sweep.unmasked else 0,
+            "data": sweep.data if sweep.unmasked else None
+        }
+        response_payload["Tier0_PQ"] = {
+            "encrypted_detected": pq_scan["encrypted_detected"],
+            "algorithm": pq_scan["algorithm"],
+            "decrypted": pq_scan.get("decrypted", False)
+        }
 
         # STEP A: HEARING (Latency-Monitored)
         hearing_result, hearing_latency = self.latency_monitor.measure(
