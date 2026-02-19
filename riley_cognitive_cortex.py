@@ -1,8 +1,8 @@
 """
-RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Cortex Executive V5.4)
-==================================================================
-Status: Executive-Active | Integrity: 96% Standard
-Protocol: 5-Tier Decision + Cardinal Rules + DSR Hilbert + Quantum-RAG
+RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Sovereign Executive V5.6)
+=====================================================================
+Status: Sovereign-Active | Integrity: 96% Standard
+Protocol: I'm-with-you + Cardinal Rules + BROCKSTONCortex Ensemble
 
 Modules:
 1.  Meta Arthur (Orchestrator)
@@ -60,7 +60,8 @@ from riley_ferrari_cortex import RileyFerrariCortex # Ferrari Brain V5.0
 from riley_hilbert_cortex import RileyHilbertCortex # Hilbert Space DSR
 from riley_ferrari_mesh import RileyFerrariMesh # Ferrari V5.2 Fleet
 from riley_executive_cortex import RileyExecutiveCortex # Cortex Executive V5.4
-from cortex_policies import PolicyEngine
+from riley_sovereign_executive import RileySovereignExecutive # V5.6 Top Command
+from cortex_policies import PolicyEngine, get_policy_engine
 from visual_cortex import VisualCortex
 from simple_memory_mesh import SimpleMemoryMesh
 from _tpu_estimator_embedding import TPULatencyMonitor
@@ -98,8 +99,9 @@ class RileyCognitiveCortex:
         self.hilbert = RileyHilbertCortex() # Hilbert Space DSR
         self.fleet_mesh = RileyFerrariMesh() # Ferrari V5.2 Fleet
         self.executive = RileyExecutiveCortex() # Cortex Executive V5.4
-        self.policy = PolicyEngine() # Cardinal Rules
+        self.policy = get_policy_engine() # Shared Cardinal Rules
         self.visual = VisualCortex() # Carbon-Silicon HUD
+        self.sovereign_exec = RileySovereignExecutive() # V5.6 Top Command
         self.latency_monitor = TPULatencyMonitor(target_ms=40)
 
         # Performance Thresholds
@@ -108,7 +110,7 @@ class RileyCognitiveCortex:
             "96_standard": 0.96
         }
 
-        logging.info("🏎️ Riley Cortex Executive V5.4: ONLINE. Cardinal Rules enforced.")
+        logging.info("🏎️ Riley Sovereign Executive V5.6: ONLINE. I'm with you.")
 
     async def vortex_loop(self, audio_data: bytes, user_input: str) -> Dict[str, Any]:
         """
