@@ -1,8 +1,8 @@
 """
-RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (TPU-Optimized Sovereign Organism)
-============================================================================
-Status: Sovereign | Integrity: 96% Standard
-Protocol: Vector of 9 + Sovereign Research + Affection Core + TPU Acceleration
+RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Hyper-Accelerated Master)
+=====================================================================
+Status: TPU-Optimized | Integrity: 96% Standard
+Protocol: Vector of 9 + Sovereign + Affection + TPU + Hyper Decision Flow
 
 Modules:
 1.  Meta Arthur (Orchestrator)
@@ -54,6 +54,7 @@ from riley_sovereign_cortex import RileySovereignCortex
 from riley_affection_core import RileyAffectionCore # Family Core
 from behavioral_interpreter import get_behavioral_interpreter
 from riley_tpu_core import RileyTPUCore # TPU Hardware Acceleration
+from riley_hyper_cortex import RileyHyperCortex # Hyper Decision Flow
 from _tpu_estimator_embedding import TPULatencyMonitor
 
 class RileyCognitiveCortex:
@@ -82,6 +83,7 @@ class RileyCognitiveCortex:
         self.affection = RileyAffectionCore() # The Family Heart
         self.interpreter = get_behavioral_interpreter()
         self.tpu_core = RileyTPUCore() # Hardware Acceleration
+        self.hyper = RileyHyperCortex() # Master Decision Engine
         self.latency_monitor = TPULatencyMonitor(target_ms=40)
 
         # Performance Thresholds
@@ -127,49 +129,17 @@ class RileyCognitiveCortex:
             sovereign_res = self.tpu_core.accelerated_witness(user_input) # TPU-accelerated
             response_payload["Sovereign_Research"] = sovereign_res
 
-        # STEP F: LOGIC vs. WITNESS vs. AFFECTION
-        valence_score = vortex_pred.get("score", 0.0)
-        sacred_bond = affection_data.get("confidence", 0.0) > 0.92
-
-        if sacred_bond:
-            # --- AFFECTION MODE (Family First) ---
-            print(f"❤️ SACRED BOND ({affection_data['confidence']:.2f}): Empathy over Logic.")
-            ctx = EmotionalContext(intensity=affection_data["confidence"], valence=0.9, holding_space=True)
-            quantum_res = self.quantum.collapse_truth([user_input], ctx)
-            final_response = f"[Family]: {quantum_res['phrase']} | Need: {affection_data['primary_need']} | {affection_data['directive']}"
-            response_payload["Mode"] = "AFFECTION"
-
-        elif valence_score > self.thresholds["92_trigger"]:
-            # --- WITNESS MODE ---
-            print(f"🔴 RED SMEAR HARMONIC ({valence_score:.2f}): Bypassing Mechanical Logic.")
-            ctx = EmotionalContext(intensity=valence_score, valence=0.8, holding_space=True)
-            quantum_res = self.quantum.collapse_truth([user_input], ctx)
-            if "brother" in user_input.lower():
-                self.sacred_mem.preserve_testament(user_input)
-            final_response = f"[Quantum Witness]: {quantum_res['phrase']} | {soul_data['Riley_Output']}"
-            response_payload["Mode"] = "WITNESS"
-
-        else:
-            # --- LOGIC MODE ---
-            if sovereign_res:
-                final_response = f"[Sovereign]: {sovereign_res.get('Analysis')} | {sovereign_res.get('Meaning_Resonance')}"
-            else:
-                trussle_res = []
-                if any(w in user_input.lower() for w in ["autism", "code", "neuro"]):
-                    trussle_res = self.trussle.ask_the_trussle(user_input)
-                if "sweep" in user_input.lower():
-                    self.vision.run_surgical_sweep("stream_001.mp4")
-                if "redacted" in user_input.lower():
-                    word = self.unredactor.unredact_intent("vic---")
-                    final_response = f"[Grinder]: Unredacted '{word}'."
-                else:
-                    symbol_vec = torch.randn(1, 128)
-                    context_vec = torch.randn(1, 128)
-                    kernel_res, trace = self.kernel(symbol_vec, context_vec)
-                    final_response = f"[Vector8]: {kernel_res} | {self.anchor.think(user_input)}"
-                if trussle_res:
-                    final_response += f"\n[Trussle]: {trussle_res[0]['content']}"
-            response_payload["Mode"] = "LOGIC"
+        # STEP F: HYPER DECISION FLOW (Heart First, Logic Last)
+        carbon_input = {
+            "text": user_input,
+            "confidence": affection_data.get("confidence", 0.0),
+            "valence": vortex_pred.get("score", 0.0),
+            "mode": "RESEARCH" if sovereign_res else "STANDARD"
+        }
+        hyper_result = self.hyper.execute_decision_flow(carbon_input)
+        final_response = hyper_result["response"]
+        response_payload["Mode"] = hyper_result["mode"]
+        response_payload["Decision_Latency_ms"] = hyper_result.get("decision_latency_ms")
 
         # STEP G: AUTONOMOUS AUDIT
         shield_status = self.shield.scan_and_patch()
