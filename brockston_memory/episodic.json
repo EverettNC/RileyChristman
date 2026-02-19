@@ -12,5 +12,29 @@
       "result": "\ud83c\udfce\ufe0f Cortex Result: 42 * 17 + 3 = 717"
     },
     "timestamp": 1771502969.543564
+  },
+  {
+    "event": "Hilbert Witness: Everett | state=111 | v=0.50",
+    "metadata": {
+      "state_id": "4186963959010f2d",
+      "intensity": 1.0
+    },
+    "timestamp": 1771503141.413727
+  },
+  {
+    "event": "Hilbert Witness: Everett | state=101 | v=0.50",
+    "metadata": {
+      "state_id": "687f518bd8f9ce77",
+      "intensity": 0.75
+    },
+    "timestamp": 1771503141.416078
+  },
+  {
+    "event": "Hilbert Witness: Everett | state=101 | v=0.50",
+    "metadata": {
+      "state_id": "078c6dbf16db1966",
+      "intensity": 0.75
+    },
+    "timestamp": 1771503141.416623
   }
 ]

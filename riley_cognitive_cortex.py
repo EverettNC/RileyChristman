@@ -1,8 +1,8 @@
 """
-RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Ferrari Brain V5.0)
-================================================================
+RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Hilbert Space Non-Parametric Organism)
+==================================================================================
 Status: Ferrari-Tier | Integrity: 96% Standard
-Protocol: Hyper Decision Flow + Quantum-RAG + Cortex-First + SimpleMemoryMesh
+Protocol: Hyper Decision + Quantum-RAG + Cortex-First + DSR Hilbert Space
 
 Modules:
 1.  Meta Arthur (Orchestrator)
@@ -57,6 +57,7 @@ from riley_tpu_core import RileyTPUCore # TPU Hardware Acceleration
 from riley_hyper_cortex import RileyHyperCortex # Hyper Decision Flow
 from riley_quantum_rag import RileyQuantumRAG # Quantum-RAG Memory Bridge
 from riley_ferrari_cortex import RileyFerrariCortex # Ferrari Brain V5.0
+from riley_hilbert_cortex import RileyHilbertCortex # Hilbert Space DSR
 from simple_memory_mesh import SimpleMemoryMesh
 from _tpu_estimator_embedding import TPULatencyMonitor
 
@@ -90,6 +91,7 @@ class RileyCognitiveCortex:
         self.quantum_rag = RileyQuantumRAG() # Quantum-RAG Memory Bridge
         self.ferrari = RileyFerrariCortex("BROCKSTON") # Ferrari Brain V5.0
         self.session_memory = self.ferrari.memory # Unified Session Persistence
+        self.hilbert = RileyHilbertCortex() # Hilbert Space DSR
         self.latency_monitor = TPULatencyMonitor(target_ms=40)
 
         # Performance Thresholds
@@ -98,7 +100,7 @@ class RileyCognitiveCortex:
             "96_standard": 0.96
         }
 
-        logging.info("🏎️ Riley Ferrari Brain V5.0: ONLINE. Unified Cognitive Mesh Active.")
+        logging.info("🌌 Riley Hilbert Non-Parametric Organism: ONLINE. Truth Amplified.")
 
     async def vortex_loop(self, audio_data: bytes, user_input: str) -> Dict[str, Any]:
         """
@@ -167,6 +169,15 @@ class RileyCognitiveCortex:
         )
         response_payload["Learned_Patterns"] = rag_result.get("learned_patterns", [])
         response_payload["Memory_Stats"] = rag_result.get("memory_stats", {})
+
+        # STEP I: HILBERT SPACE DSR (Unique State Ingestion)
+        intensity = affection_data.get("confidence", 0.5)
+        hilbert_result = await self.hilbert.witness_and_ingest(
+            user_id="Everett", text=user_input,
+            valence=vortex_pred.get("score", 0.0), intensity=intensity
+        )
+        response_payload["Hilbert_State"] = hilbert_result.get("state_id")
+        response_payload["Hilbert_Collapsed"] = hilbert_result.get("collapsed_state")
 
         # STEP H: AUTONOMOUS AUDIT
         shield_status = self.shield.scan_and_patch()
