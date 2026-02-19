@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(name)s: %(mess
 logger = logging.getLogger(__name__)
 
 # Core Crypto
-from pq_layer import XChaCha20Cipher, MLKEM
+from christman_crypto import XChaCha20Cipher, MLKEM
 
 # The New Unified Cortex (S2S Orchestrator)
 from riley_cognitive_cortex import get_riley_cortex, RileyKernelCortex
@@ -138,7 +138,7 @@ async def run_demo():
     user_shared_secret = client_kem.decapsulate(user_dk, avatar_ciphertext)
     
     # Derive session key (Client side needs same HKDF as Brain)
-    from pq_layer import HybridPQCipher
+    from christman_crypto import HybridPQCipher
     client_pq = HybridPQCipher(768)
     user_session_key = client_pq._hkdf(user_shared_secret)
 

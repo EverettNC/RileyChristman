@@ -27,7 +27,7 @@ except ImportError:
         _here = os.path.dirname(os.path.abspath(__file__))
         if _here not in sys.path:
             sys.path.insert(0, _here)
-        from pq_layer import MLKEM as _MLKEM_IMPL
+        from christman_crypto.postquantum import MLKEM as _MLKEM_IMPL
         _BACKEND = "pq_layer"
         logger.info("ML-KEM backend: pq_layer (built-in FIPS 203)")
     except ImportError:

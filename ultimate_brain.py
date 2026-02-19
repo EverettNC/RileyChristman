@@ -28,7 +28,7 @@ from riley_research_partner import RileyResearchPartner
 
 
 try:
-    from pq_layer import HybridPQCipher, MLKEM
+    from christman_crypto import HybridPQCipher, MLKEM
     PQ_AVAILABLE = True
 except ImportError:
     PQ_AVAILABLE = False
