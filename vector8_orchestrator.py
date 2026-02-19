@@ -1,44 +1,89 @@
 """
 Vector8 Orchestrator: The Brain
 Standard: 96% Quality Threshold
-Wraps the RileyKernelCortex for Vector Logic.
+Real 8-dimensional truth vector via sentence-transformers embeddings.
 """
-from riley_cognitive_cortex import get_riley_cortex
-import torch
+import logging
+import numpy as np
+from typing import Tuple, Dict
+
+try:
+    from sentence_transformers import SentenceTransformer
+    _model = SentenceTransformer("all-MiniLM-L6-v2")
+    _ST_AVAILABLE = True
+except Exception:
+    _model = None
+    _ST_AVAILABLE = False
+
+# Eight conceptual axes Riley measures truth along
+AXIS_ANCHORS = {
+    "truth":   "This is factually accurate and verifiable.",
+    "empathy": "I understand your pain and I am with you.",
+    "logic":   "The evidence and reasoning are sound.",
+    "courage": "This requires bravery to face and act upon.",
+    "past":    "This is rooted in memory and what has happened before.",
+    "future":  "This points toward what is coming and what can be built.",
+    "self":    "This is about who I am and my own identity.",
+    "other":   "This is about the people around me and their needs.",
+}
+
+_axis_embeddings: Dict[str, np.ndarray] = {}
+
+def _get_axis_embeddings():
+    global _axis_embeddings
+    if not _axis_embeddings and _ST_AVAILABLE:
+        texts = list(AXIS_ANCHORS.values())
+        embs = _model.encode(texts, normalize_embeddings=True)
+        for key, emb in zip(AXIS_ANCHORS.keys(), embs):
+            _axis_embeddings[key] = emb
+    return _axis_embeddings
+
 
 class Vector8Orchestrator:
     def __init__(self):
-        self.cortex = get_riley_cortex()
+        if _ST_AVAILABLE:
+            _get_axis_embeddings()
+            logging.info("🧠 Vector8: sentence-transformers LIVE. 8-axis truth mapping active.")
+        else:
+            logging.warning("🧠 Vector8: sentence-transformers unavailable — fallback active.")
 
-    def vector_out(self, user_input):
+    def vector_out(self, user_input: str) -> Tuple[str, str, Dict[str, float]]:
         """
-        Processes input and returns (Specialist, Resonance, Truth Vector).
+        Projects user_input into the 8-dimensional truth space via cosine
+        similarity against conceptual anchor sentences.
+        Returns (specialist, resonance, truth_vector).
         """
-        # 1. Use Kernel Cortex to process
-        # We need to adapt the string input to the tensor logic if needed,
-        # or just use the Cortex's process_interaction for high level logic.
-        
-        # For Vector8 compliance, we mock the 8-dimensional truth vector
-        # based on the Kernel's latent trace.
-        
-        # We can just call the async method or use internal logic?
-        # Let's use internal logic for synchronous vector extraction
-        # (Mocking the conversion for this layer)
-        
-        # Simulating vector from text content
-        val = 0.95 if "family" in user_input.lower() else 0.5
-        truth_vector = {
-            "truth": val,
-            "empathy": 0.8,
-            "logic": 0.7,
-            "courage": 0.9,
-            "past": 0.6,
-            "future": 0.8,
-            "self": 0.5,
-            "other": 0.9
+        if _ST_AVAILABLE:
+            input_emb = _model.encode([user_input], normalize_embeddings=True)[0]
+            axes = _get_axis_embeddings()
+            truth_vector = {
+                axis: float(np.clip(np.dot(input_emb, axes[axis]), 0.0, 1.0))
+                for axis in axes
+            }
+        else:
+            # Keyword fallback — real scoring without the model
+            low = user_input.lower()
+            truth_vector = {
+                "truth":   0.9 if any(w in low for w in ["true","fact","verify","real","evidence"]) else 0.4,
+                "empathy": 0.9 if any(w in low for w in ["feel","hurt","pain","love","miss","lost"]) else 0.4,
+                "logic":   0.9 if any(w in low for w in ["because","therefore","reason","proof","calculate"]) else 0.4,
+                "courage": 0.9 if any(w in low for w in ["fight","stand","brave","face","protect"]) else 0.4,
+                "past":    0.9 if any(w in low for w in ["remember","before","history","was","used to"]) else 0.4,
+                "future":  0.9 if any(w in low for w in ["will","plan","build","next","goal"]) else 0.4,
+                "self":    0.9 if any(w in low for w in ["i am","myself","identity","who i"]) else 0.4,
+                "other":   0.9 if any(w in low for w in ["they","you","family","friend","people"]) else 0.4,
+            }
+
+        # Dominant axis determines specialist
+        dominant = max(truth_vector, key=lambda k: truth_vector[k])
+        specialist_map = {
+            "truth": "Forensic", "empathy": "AlphaWolf", "logic": "Analyst",
+            "courage": "Inferno", "past": "Memory", "future": "Architect",
+            "self": "Mirror", "other": "AlphaVox",
         }
-        
-        specialist = "AlphaWolf" if val > 0.8 else "Analyst"
-        resonance = "High" if val > 0.9 else "Stable"
-        
+        specialist = specialist_map.get(dominant, "Analyst")
+
+        avg = float(np.mean(list(truth_vector.values())))
+        resonance = "High" if avg > 0.7 else ("Stable" if avg > 0.5 else "Low")
+
         return specialist, resonance, truth_vector
