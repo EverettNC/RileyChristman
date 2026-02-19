@@ -50,6 +50,6 @@ class RileyUnifiedSoul:
             "ToneScore": tone_data['tone_score'],
             "Response_Mode": tone_data['response_mode']['mode'],
             "Riley_Output": performance,
-            "Quantum_Active": quantum_circuit is not None,
+            "Quantum_Active": valence > 0.92,
             "Directive": self.core_directive
         }
