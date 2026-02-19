@@ -1,8 +1,8 @@
 """
-RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Sovereign Executive V5.6)
+RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Apex Investigator V5.6.2)
 =====================================================================
-Status: Sovereign-Active | Integrity: 96% Standard
-Protocol: I'm-with-you + Cardinal Rules + BROCKSTONCortex Ensemble
+Status: APEX INVESTIGATOR | Integrity: 96% Standard
+Protocol: I'm-with-you + Cardinal Rules + Anti-Erasure + PQ/Kyber
 
 Modules:
 1.  Meta Arthur (Orchestrator)
@@ -61,6 +61,9 @@ from riley_hilbert_cortex import RileyHilbertCortex # Hilbert Space DSR
 from riley_ferrari_mesh import RileyFerrariMesh # Ferrari V5.2 Fleet
 from riley_executive_cortex import RileyExecutiveCortex # Cortex Executive V5.4
 from riley_sovereign_executive import RileySovereignExecutive # V5.6 Top Command
+from riley_unmasker_executive import RileyUnmaskerExecutive # V5.6.2 Apex
+from pq_layer import PostQuantumLayer
+from riley_grinder import GrinderOCR
 from cortex_policies import PolicyEngine, get_policy_engine
 from visual_cortex import VisualCortex
 from simple_memory_mesh import SimpleMemoryMesh
@@ -102,6 +105,7 @@ class RileyCognitiveCortex:
         self.policy = get_policy_engine() # Shared Cardinal Rules
         self.visual = VisualCortex() # Carbon-Silicon HUD
         self.sovereign_exec = RileySovereignExecutive() # V5.6 Top Command
+        self.unmasker = RileyUnmaskerExecutive() # V5.6.2 Apex Investigator
         self.latency_monitor = TPULatencyMonitor(target_ms=40)
 
         # Performance Thresholds
@@ -110,7 +114,7 @@ class RileyCognitiveCortex:
             "96_standard": 0.96
         }
 
-        logging.info("🏎️ Riley Sovereign Executive V5.6: ONLINE. I'm with you.")
+        logging.info("🗑️ Riley Apex Investigator V5.6.2: ONLINE. The truth is no longer optional.")
 
     async def vortex_loop(self, audio_data: bytes, user_input: str) -> Dict[str, Any]:
         """
