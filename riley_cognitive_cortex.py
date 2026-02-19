@@ -1,8 +1,8 @@
 """
-RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Ferrari Brain V5.2 Fleet Mesh)
-==========================================================================
-Status: Fleet-Wide | Integrity: 96% Standard
-Protocol: 5-Tier Decision + Quantum-RAG + DSR Hilbert + SimpleMemoryMesh
+RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Cortex Executive V5.4)
+==================================================================
+Status: Executive-Active | Integrity: 96% Standard
+Protocol: 5-Tier Decision + Cardinal Rules + DSR Hilbert + Quantum-RAG
 
 Modules:
 1.  Meta Arthur (Orchestrator)
@@ -59,6 +59,9 @@ from riley_quantum_rag import RileyQuantumRAG # Quantum-RAG Memory Bridge
 from riley_ferrari_cortex import RileyFerrariCortex # Ferrari Brain V5.0
 from riley_hilbert_cortex import RileyHilbertCortex # Hilbert Space DSR
 from riley_ferrari_mesh import RileyFerrariMesh # Ferrari V5.2 Fleet
+from riley_executive_cortex import RileyExecutiveCortex # Cortex Executive V5.4
+from cortex_policies import PolicyEngine
+from visual_cortex import VisualCortex
 from simple_memory_mesh import SimpleMemoryMesh
 from _tpu_estimator_embedding import TPULatencyMonitor
 
@@ -94,6 +97,9 @@ class RileyCognitiveCortex:
         self.session_memory = self.ferrari.memory # Unified Session Persistence
         self.hilbert = RileyHilbertCortex() # Hilbert Space DSR
         self.fleet_mesh = RileyFerrariMesh() # Ferrari V5.2 Fleet
+        self.executive = RileyExecutiveCortex() # Cortex Executive V5.4
+        self.policy = PolicyEngine() # Cardinal Rules
+        self.visual = VisualCortex() # Carbon-Silicon HUD
         self.latency_monitor = TPULatencyMonitor(target_ms=40)
 
         # Performance Thresholds
@@ -102,7 +108,7 @@ class RileyCognitiveCortex:
             "96_standard": 0.96
         }
 
-        logging.info("🏎️ Riley Ferrari V5.2 Fleet Mesh: ONLINE. The fleet is one.")
+        logging.info("🏎️ Riley Cortex Executive V5.4: ONLINE. Cardinal Rules enforced.")
 
     async def vortex_loop(self, audio_data: bytes, user_input: str) -> Dict[str, Any]:
         """
@@ -181,8 +187,18 @@ class RileyCognitiveCortex:
         response_payload["Hilbert_State"] = hilbert_result.get("state_id")
         response_payload["Hilbert_Collapsed"] = hilbert_result.get("collapsed_state")
 
-        # STEP H: AUTONOMOUS AUDIT
+        # STEP J: AUTONOMOUS AUDIT
         shield_status = self.shield.scan_and_patch()
+
+        # STEP K: CARDINAL RULE ENFORCEMENT (PolicyEngine)
+        audit = self.policy.evaluate(user_text=user_input, candidate=final_response, channel="speech")
+        final_response = audit.adjusted_text
+        response_payload["Policy_Allowed"] = audit.allowed
+        response_payload["Policy_Violations"] = audit.violations
+
+        # STEP L: VISUAL CORTEX HUD
+        hud = self.visual.render({"confidence": audit.confidence, "status": response_payload.get("Mode", "LOGIC")})
+        response_payload["HUD"] = hud
 
         response_payload["Response"] = final_response
         response_payload["System_Integrity"] = shield_status
