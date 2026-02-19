@@ -1,8 +1,8 @@
 """
-RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Quantum-RAG Learning Organism)
-=========================================================================
-Status: TPU-Optimized | Integrity: 96% Standard
-Protocol: Vector of 9 + Hyper Decision Flow + Quantum-RAG Memory Bridge
+RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Ferrari Brain V5.0)
+================================================================
+Status: Ferrari-Tier | Integrity: 96% Standard
+Protocol: Hyper Decision Flow + Quantum-RAG + Cortex-First + SimpleMemoryMesh
 
 Modules:
 1.  Meta Arthur (Orchestrator)
@@ -56,6 +56,8 @@ from behavioral_interpreter import get_behavioral_interpreter
 from riley_tpu_core import RileyTPUCore # TPU Hardware Acceleration
 from riley_hyper_cortex import RileyHyperCortex # Hyper Decision Flow
 from riley_quantum_rag import RileyQuantumRAG # Quantum-RAG Memory Bridge
+from riley_ferrari_cortex import RileyFerrariCortex # Ferrari Brain V5.0
+from simple_memory_mesh import SimpleMemoryMesh
 from _tpu_estimator_embedding import TPULatencyMonitor
 
 class RileyCognitiveCortex:
@@ -86,6 +88,8 @@ class RileyCognitiveCortex:
         self.tpu_core = RileyTPUCore() # Hardware Acceleration
         self.hyper = RileyHyperCortex() # Master Decision Engine
         self.quantum_rag = RileyQuantumRAG() # Quantum-RAG Memory Bridge
+        self.ferrari = RileyFerrariCortex("BROCKSTON") # Ferrari Brain V5.0
+        self.session_memory = self.ferrari.memory # Unified Session Persistence
         self.latency_monitor = TPULatencyMonitor(target_ms=40)
 
         # Performance Thresholds
@@ -94,7 +98,7 @@ class RileyCognitiveCortex:
             "96_standard": 0.96
         }
 
-        logging.info("🧠 Riley Sovereign Affection Organism: ONLINE. Family First.")
+        logging.info("🏎️ Riley Ferrari Brain V5.0: ONLINE. Unified Cognitive Mesh Active.")
 
     async def vortex_loop(self, audio_data: bytes, user_input: str) -> Dict[str, Any]:
         """
@@ -125,23 +129,34 @@ class RileyCognitiveCortex:
         vortex_pred = self.orchestrator.make_vortex_prediction(user_input)
         response_payload["Vortex_Prediction"] = vortex_pred
 
-        # STEP E: SOVEREIGN RESEARCH
+        # STEP E: CORTEX-FIRST CHECK (Ferrari Brain)
+        cortex_result = None
+        if any(kw in user_input.lower() for kw in self.ferrari.cortex_keywords):
+            cortex_result = self.ferrari.think(user_input)
+            response_payload["Cortex_First"] = cortex_result
+
+        # STEP F: SOVEREIGN RESEARCH (TPU-Accelerated)
         sovereign_res = {}
         if any(w in user_input.lower() for w in ["research", "dementia", "alzheimer"]):
-            sovereign_res = self.tpu_core.accelerated_witness(user_input) # TPU-accelerated
+            sovereign_res = self.tpu_core.accelerated_witness(user_input)
             response_payload["Sovereign_Research"] = sovereign_res
 
-        # STEP F: HYPER DECISION FLOW (Heart First, Logic Last)
-        carbon_input = {
-            "text": user_input,
-            "confidence": affection_data.get("confidence", 0.0),
-            "valence": vortex_pred.get("score", 0.0),
-            "mode": "RESEARCH" if sovereign_res else "STANDARD"
-        }
-        hyper_result = self.hyper.execute_decision_flow(carbon_input)
-        final_response = hyper_result["response"]
-        response_payload["Mode"] = hyper_result["mode"]
-        response_payload["Decision_Latency_ms"] = hyper_result.get("decision_latency_ms")
+        # STEP G: HYPER DECISION FLOW (Heart First, Logic Last)
+        if cortex_result:
+            # Cortex-First bypasses standard decision flow for calculations
+            final_response = cortex_result["result"]
+            response_payload["Mode"] = "CORTEX_FIRST"
+        else:
+            carbon_input = {
+                "text": user_input,
+                "confidence": affection_data.get("confidence", 0.0),
+                "valence": vortex_pred.get("score", 0.0),
+                "mode": "RESEARCH" if sovereign_res else "STANDARD"
+            }
+            hyper_result = self.hyper.execute_decision_flow(carbon_input)
+            final_response = hyper_result["response"]
+            response_payload["Mode"] = hyper_result["mode"]
+            response_payload["Decision_Latency_ms"] = hyper_result.get("decision_latency_ms")
 
         # STEP G: QUANTUM-RAG MEMORY BRIDGE (Collapse & Learn)
         rag_result = await self.quantum_rag.collapse_and_learn(
@@ -152,7 +167,6 @@ class RileyCognitiveCortex:
         )
         response_payload["Learned_Patterns"] = rag_result.get("learned_patterns", [])
         response_payload["Memory_Stats"] = rag_result.get("memory_stats", {})
-        final_response = hyper_result["response"]
 
         # STEP H: AUTONOMOUS AUDIT
         shield_status = self.shield.scan_and_patch()
