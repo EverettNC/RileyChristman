@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 from pq_layer import XChaCha20Cipher, MLKEM
 
 # The New Unified Cortex (S2S Orchestrator)
-from riley_cognitive_cortex import get_riley_cortex, RileyCognitiveCortex
+from riley_cognitive_cortex import get_riley_cortex, RileyKernelCortex
 
 import asyncio
 
