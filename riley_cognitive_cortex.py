@@ -1,8 +1,8 @@
 """
-RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Hyper-Accelerated Master)
-=====================================================================
+RILEY CHRISTMAN: THE UNIFIED LEGACY BUILD (Quantum-RAG Learning Organism)
+=========================================================================
 Status: TPU-Optimized | Integrity: 96% Standard
-Protocol: Vector of 9 + Sovereign + Affection + TPU + Hyper Decision Flow
+Protocol: Vector of 9 + Hyper Decision Flow + Quantum-RAG Memory Bridge
 
 Modules:
 1.  Meta Arthur (Orchestrator)
@@ -55,6 +55,7 @@ from riley_affection_core import RileyAffectionCore # Family Core
 from behavioral_interpreter import get_behavioral_interpreter
 from riley_tpu_core import RileyTPUCore # TPU Hardware Acceleration
 from riley_hyper_cortex import RileyHyperCortex # Hyper Decision Flow
+from riley_quantum_rag import RileyQuantumRAG # Quantum-RAG Memory Bridge
 from _tpu_estimator_embedding import TPULatencyMonitor
 
 class RileyCognitiveCortex:
@@ -84,6 +85,7 @@ class RileyCognitiveCortex:
         self.interpreter = get_behavioral_interpreter()
         self.tpu_core = RileyTPUCore() # Hardware Acceleration
         self.hyper = RileyHyperCortex() # Master Decision Engine
+        self.quantum_rag = RileyQuantumRAG() # Quantum-RAG Memory Bridge
         self.latency_monitor = TPULatencyMonitor(target_ms=40)
 
         # Performance Thresholds
@@ -141,7 +143,18 @@ class RileyCognitiveCortex:
         response_payload["Mode"] = hyper_result["mode"]
         response_payload["Decision_Latency_ms"] = hyper_result.get("decision_latency_ms")
 
-        # STEP G: AUTONOMOUS AUDIT
+        # STEP G: QUANTUM-RAG MEMORY BRIDGE (Collapse & Learn)
+        rag_result = await self.quantum_rag.collapse_and_learn(
+            user_id="Everett",
+            text=user_input,
+            valence=vortex_pred.get("score", 0.0),
+            confidence=affection_data.get("confidence", 0.0)
+        )
+        response_payload["Learned_Patterns"] = rag_result.get("learned_patterns", [])
+        response_payload["Memory_Stats"] = rag_result.get("memory_stats", {})
+        final_response = hyper_result["response"]
+
+        # STEP H: AUTONOMOUS AUDIT
         shield_status = self.shield.scan_and_patch()
 
         response_payload["Response"] = final_response
