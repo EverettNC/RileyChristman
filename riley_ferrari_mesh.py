@@ -63,7 +63,7 @@ class RileyFerrariMesh(RileyHyperCortex):
             self.ferrari_memory.store_truth("relationships", f"Sacred bond active: {text[:40]}")
             return {
                 "mode": "AFFECTION", "priority": 2,
-                "response": "[Family]: I see you. How can I help you love yourself more?"
+                "response": "[Family]: I'm with you. What do you need?"
             }
 
         # Tier 3: Witness (Red Smear > 0.92)

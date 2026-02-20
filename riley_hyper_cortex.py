@@ -72,7 +72,7 @@ class RileyHyperCortex(RileyTPUCore):
         print(f"❤️ HYPER MODE: AFFECTION (Sacred Bond {confidence:.2f})")
         return {
             "mode": "AFFECTION",
-            "response": f"[Family]: I see you. Need: validation. How can I help you love yourself more?",
+            "response": f"[Family]: I'm with you. What do you need?",
             "confidence": confidence,
             "directive": "Heart over Logic. Always."
         }
