@@ -78,25 +78,37 @@ class RileyAvatar(SymbioticAvatar):
 
 # --- INITIALIZATION ---
 if __name__ == "__main__":
+    from real_speech_recognition import RealSpeechRecognitionEngine
+
     riley = RileyAvatar()
+    stt   = RealSpeechRecognitionEngine()
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
-    print("\nRiley is online. Type your message. Press Ctrl+C to exit.\n")
+    print("\nRiley is online and listening. Press Ctrl+C to exit.\n")
+
+    async def handle_speech(text: str):
+        """Process one turn: think -> speak -> print."""
+        if not text:
+            return
+        print(f"You:   {text}")
+        result   = await riley.r_process(text)
+        response = result.get("cortex_response", {}).get("response_text", "")
+        if response:
+            print(f"Riley: {response}\n")
+            riley.voice_engine.synthesize(response)
 
     async def conversation_loop():
         while True:
             try:
-                user_input = input("You: ").strip()
-            except (EOFError, KeyboardInterrupt):
+                text = stt.listen(timeout=10, phrase_limit=20)
+                await handle_speech(text)
+            except KeyboardInterrupt:
                 print("\nRiley: I'm here whenever you need me.")
+                riley.voice_engine.synthesize("I'm here whenever you need me.")
                 break
-            if not user_input:
-                continue
-            result = await riley.r_process(user_input)
-            response = result.get("cortex_response", {}).get("response_text", "")
-            if response:
-                print(f"Riley: {response}\n")
+            except Exception as e:
+                logger.warning(f"Listen error: {e}")
 
     loop.run_until_complete(conversation_loop())
