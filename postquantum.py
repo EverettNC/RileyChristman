@@ -56,7 +56,9 @@ class XChaCha20Cipher:
 
     @staticmethod
     def _load_libsodium() -> ctypes.CDLL:
-        for name in ('libsodium.so.23', 'libsodium.so', 'libsodium.dylib',
+        for name in ('libsodium.so.23', 'libsodium.so', 'libsodium.26.dylib',
+                     'libsodium.dylib', '/usr/local/lib/libsodium.26.dylib',
+                     '/usr/local/lib/libsodium.dylib',
                      'libsodium-23.dll', 'libsodium.dll'):
             try:
                 lib = ctypes.CDLL(name)
