@@ -14,3 +14,20 @@ GEMINI_BRIDGE.log
 venv/
 env/
 .env
+
+# Runtime memory / data files
+brockston_memory/*.json
+ferrari_fleet_mesh/*.json.bak
+*.bak
+
+# TensorFlow / training runs
+runs/
+
+# Claude worktree data
+.claude/
+
+# Documents that don't belong in source
+*.pdf
+
+# Runtime scripts
+run_riley.sh
