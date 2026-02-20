@@ -31,7 +31,7 @@ class ToneScoreEngine:
         self.quality_threshold = 0.96
 
     def analyze_tone(self, audio_path: str) -> Dict:
-        if not librosa:
+        if not librosa or not audio_path:
             return {"tone_score": 85, "valence": 50.0, "response_mode": {"mode": "standard"}}
 
         # 1. Physics: Pitch, Jitter (stress), Shimmer (exhaustion), HNR (clarity)

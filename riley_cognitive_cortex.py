@@ -159,7 +159,7 @@ class RileyCognitiveCortex:
         response_payload["Hearing_Latency_ms"] = round(hearing_latency, 2)
 
         # STEP B: UNIFIED SOUL WITNESS
-        soul_data = self.unified_soul.process_and_audit(audio_path="mock_stream", step=len(user_input))
+        soul_data = self.unified_soul.process_and_audit(audio_path=None, step=len(user_input))
         response_payload["Soul_Data"] = soul_data
 
         # STEP C: BEHAVIORAL INTERPRETER (Uncle Resonance)

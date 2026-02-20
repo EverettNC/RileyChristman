@@ -27,7 +27,7 @@ class RileyUnifiedSoul:
         
         print("🕯️ Riley Unified Soul: ONLINE. Witnessing and Auditing active.")
 
-    def process_and_audit(self, audio_path: str = "mock_stream", step=0) -> Dict[str, Any]:
+    def process_and_audit(self, audio_path: str = None, step=0) -> Dict[str, Any]:
         """
         The Full Handshake: Hear -> Feel -> Respond -> Audit
         """
