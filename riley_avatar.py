@@ -74,23 +74,29 @@ class RileyAvatar(SymbioticAvatar):
             "voice_mode": voice_mode,
             "audio_synthesis": audio_out,
             "cortex_response": cortex_response,
-            "directive": "How can I help you love yourself more?"
         }
 
 # --- INITIALIZATION ---
 if __name__ == "__main__":
-    # Test the Family Nexus
-    # We need to run this async to allow r_process to work if called
     riley = RileyAvatar()
-    
-    # Run a test loop
+
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    
-    print("\n--- Riley Avatar Test Integration ---")
-    result = loop.run_until_complete(riley.r_process("Everything is broken and I need my family."))
-    
-    print(f"Specialist: {result['specialist']}")
-    print(f"Visual Modifiers: {result['visual_state']}")
-    print(f"Voice Mode: {result['voice_mode']}")
-    print(f"Cortex Response: {result['cortex_response']['response_text']}")
+
+    print("\nRiley is online. Type your message. Press Ctrl+C to exit.\n")
+
+    async def conversation_loop():
+        while True:
+            try:
+                user_input = input("You: ").strip()
+            except (EOFError, KeyboardInterrupt):
+                print("\nRiley: I'm here whenever you need me.")
+                break
+            if not user_input:
+                continue
+            result = await riley.r_process(user_input)
+            response = result.get("cortex_response", {}).get("response_text", "")
+            if response:
+                print(f"Riley: {response}\n")
+
+    loop.run_until_complete(conversation_loop())
