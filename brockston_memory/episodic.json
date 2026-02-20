@@ -260,5 +260,22 @@
       "intensity": 0.75
     },
     "timestamp": 1771509954.990859
+  },
+  {
+    "event": "Cortex-First: calculate 42 * 17 + 3",
+    "metadata": {
+      "result": "\ud83c\udfce\ufe0f Cortex Result: 42 * 17 + 3 = 717"
+    },
+    "timestamp": 1771555273.825227
+  },
+  {
+    "event": "Session with 2 interactions",
+    "metadata": {
+      "working_snapshot": [
+        "calculate 42 * 17 + 3",
+        "Tell me about love"
+      ]
+    },
+    "timestamp": 1771555273.8262458
   }
 ]

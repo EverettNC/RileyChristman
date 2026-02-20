@@ -1,4 +1,4 @@
-“”” POST-QUANTUM LAYER  
+""" POST-QUANTUM LAYER  
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║  POST-QUANTUM LAYER  |  The Christman AI Project                           ║
 ║  Powered by Luma Cognify AI                                                 ║
@@ -8,7 +8,7 @@
 ║            Variants: ML-KEM-512, ML-KEM-768, ML-KEM-1024                  ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║  WHY POST-QUANTUM NOW?                                                      ║
-║  “Harvest Now, Decrypt Later” — adversaries record today’s encrypted        ║
+║  "Harvest Now, Decrypt Later" — adversaries record today's encrypted        ║
 ║  traffic and decrypt it once quantum computers arrive (~2030 estimate).     ║
 ║  Medical records, personal communications, identity data encrypted now      ║
 ║  with classical algorithms are already at long-term risk.                   ║
@@ -20,11 +20,11 @@ ML-KEM is a pure-Python reference implementation of NIST FIPS 203 (2024).
 It is correct and complete. For high-throughput production use, a compiled
 binding (e.g., liboqs via cffi once network is available) would be faster.
 This implementation prioritizes correctness, auditability, and zero
-external dependencies beyond Python’s standard library.
+external dependencies beyond Python's standard library.
 
 XChaCha20-Poly1305 uses libsodium via ctypes — the same library
 that powers Signal, WhatsApp, and Wireguard.
-“””
+"""
 
 import os
 import struct
@@ -39,7 +39,7 @@ from typing import Tuple, Optional
 # ─────────────────────────────────────────────────────────────────────────────
 
 class XChaCha20Cipher:
-“””
+"""
 XChaCha20-Poly1305 — Extended-nonce authenticated stream encryption.
 
 ```
@@ -163,7 +163,7 @@ def generate_key() -> bytes:
 
 # Module Learning With Errors (MLWE) problem. Designed to resist attacks
 
-# from quantum computers running Shor’s algorithm, which breaks RSA and ECC.
+# from quantum computers running Shor's algorithm, which breaks RSA and ECC.
 
 # 
 
@@ -230,12 +230,12 @@ return r - Q if r >= Q else r
 # ── NTT zeta table (precomputed powers of ZETA mod Q) ────────────────────────
 
 def _precompute_zetas() -> list:
-“”“Bit-reversed powers of zeta for Cooley-Tukey NTT.”””
+"""Bit-reversed powers of zeta for Cooley-Tukey NTT."""
 zetas = [0] * 128
 z = 1
 for i in range(128):
 # bit-reverse index for i in range 128
-br = int(format(i, ‘07b’)[::-1], 2)
+br = int(format(i, '07b')[::-1], 2)
 zetas[br] = z
 z = (z * ZETA) % Q
 return zetas
@@ -243,11 +243,11 @@ return zetas
 _ZETAS = _precompute_zetas()
 
 def _ntt(f: list) -> list:
-“””
+"""
 Number Theoretic Transform — converts polynomial to NTT domain.
 FIPS 203 Algorithm 9.
 In-place on a copy; input/output are length-256 lists of ints mod Q.
-“””
+"""
 f = f[:]
 k, length = 1, 128
 while length >= 2:
@@ -264,10 +264,10 @@ length >>= 1
 return f
 
 def _inv_ntt(f: list) -> list:
-“””
+"""
 Inverse NTT — converts back from NTT domain.
 FIPS 203 Algorithm 10.
-“””
+"""
 f = f[:]
 k, length = 127, 2
 while length <= 128:
@@ -286,16 +286,16 @@ return [(x * f256_inv) % Q for x in f]
 
 def _base_case_multiply(a0: int, a1: int, b0: int, b1: int,
 zeta: int) -> Tuple[int, int]:
-“”“FIPS 203 Algorithm 11 — multiplication in base case of NTT.”””
+"""FIPS 203 Algorithm 11 — multiplication in base case of NTT."""
 c0 = _mod(a0 * b0 + zeta * a1 * b1)
 c1 = _mod(a0 * b1 + a1 * b0)
 return c0, c1
 
 def _multiply_ntt(f: list, g: list) -> list:
-“””
+"""
 Pointwise multiplication in NTT domain.
 FIPS 203 Algorithm 12.
-“””
+"""
 h = [0] * 256
 for i in range(64):
 zeta = _ZETAS[64 + i]
@@ -311,7 +311,7 @@ return [(x + y) % Q for x, y in zip(a, b)]
 # ── Bit packing / encoding ────────────────────────────────────────────────────
 
 def _encode(poly: list, bits: int) -> bytes:
-“”“Encode polynomial coefficients into bytes, `bits` per coefficient.”””
+"""Encode polynomial coefficients into bytes, `bits` per coefficient."""
 out, buf, buf_bits = bytearray(), 0, 0
 mask = (1 << bits) - 1
 for c in poly:
@@ -326,7 +326,7 @@ out.append(buf & 0xFF)
 return bytes(out)
 
 def _decode(data: bytes, bits: int) -> list:
-“”“Decode bytes into polynomial coefficients, `bits` per coefficient.”””
+"""Decode bytes into polynomial coefficients, `bits` per coefficient."""
 poly, buf, buf_bits, idx = [], 0, 0, 0
 mask = (1 << bits) - 1
 while len(poly) < N:
@@ -342,11 +342,11 @@ return poly
 # ── Compression / decompression ───────────────────────────────────────────────
 
 def *compress(x: int, d: int) -> int:
-“”“FIPS 203 Compress_d: maps Zq → Z*{2^d}.”””
+"""FIPS 203 Compress_d: maps Zq → Z*{2^d}."""
 return round((2**d / Q) * x) % (2**d)
 
 def *decompress(x: int, d: int) -> int:
-“”“FIPS 203 Decompress_d: maps Z*{2^d} → Zq.”””
+"""FIPS 203 Decompress_d: maps Z*{2^d} → Zq."""
 return round((Q / 2**d) * x) % Q
 
 def _compress_poly(p: list, d: int) -> list:
@@ -358,10 +358,10 @@ return [_decompress(c, d) for c in p]
 # ── Sampling ──────────────────────────────────────────────────────────────────
 
 def _sample_ntt(seed: bytes, i: int, j: int) -> list:
-“””
+"""
 FIPS 203 SampleNTT — sample a uniform random polynomial in NTT domain
 from a 32-byte seed using SHAKE-128.
-“””
+"""
 xof   = hashlib.shake_128(seed + bytes([i, j]))
 stream = xof.digest(840)  # enough bytes for rejection sampling
 poly, idx = [], 0
@@ -387,10 +387,10 @@ break  # failsafe
 return poly[:N]
 
 def _cbd(prf_output: bytes, eta: int) -> list:
-“””
+"""
 FIPS 203 SamplePolyCBD — centered binomial distribution.
 Generates a small-coefficient polynomial for noise/secret.
-“””
+"""
 poly = []
 bits = []
 for byte in prf_output:
@@ -403,13 +403,13 @@ poly.append(_mod(a - b))
 return poly
 
 def _prf(seed: bytes, nonce: int, length: int) -> bytes:
-“”“FIPS 203 PRF — SHAKE-256 keyed with seed||nonce.”””
+"""FIPS 203 PRF — SHAKE-256 keyed with seed||nonce."""
 return hashlib.shake_256(seed + bytes([nonce])).digest(length)
 
 # ── Key generation, encapsulation, decapsulation ─────────────────────────────
 
 class MLKEM:
-“””
+"""
 ML-KEM (CRYSTALS-Kyber) Key Encapsulation Mechanism.
 Implements NIST FIPS 203 (August 2024).
 
@@ -654,7 +654,7 @@ def __repr__(self):
 # ─────────────────────────────────────────────────────────────────────────────
 
 class HybridPQCipher:
-“””
+"""
 Post-Quantum Hybrid Encryption.
 
 ```
@@ -731,20 +731,20 @@ def decrypt(self, dk: bytes, bundle: bytes) -> bytes:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def run_tests():
-print(”\n” + “═”*78)
-print(”  XChaCha20-Poly1305  |  Self-Test”)
-print(“═”*78)
+print("\n" + "═"*78)
+print("  XChaCha20-Poly1305  |  Self-Test")
+print("═"*78)
 xcha = XChaCha20Cipher()
 key  = xcha.generate_key()
-msg  = b”The Christman AI Project - Protecting the vulnerable since 2012.”
-enc  = xcha.encrypt(key, msg, aad=b”test-aad”)
-dec  = xcha.decrypt(key, enc, aad=b”test-aad”)
-assert dec == msg, “XChaCha20 round-trip failed”
-print(f”  Key       : {key.hex()[:24]}…”)
-print(f”  Nonce     : {enc[:24].hex()}  (192-bit, random)”)
-print(f”  Ciphertext: {enc[24:56].hex()}…”)
-print(f”  Decrypted : {dec.decode()}”)
-print(f”  ✓ XChaCha20-Poly1305 PASSED\n”)
+msg  = b"The Christman AI Project - Protecting the vulnerable since 2012."
+enc  = xcha.encrypt(key, msg, aad=b"test-aad")
+dec  = xcha.decrypt(key, enc, aad=b"test-aad")
+assert dec == msg, "XChaCha20 round-trip failed"
+print(f"  Key       : {key.hex()[:24]}…")
+print(f"  Nonce     : {enc[:24].hex()}  (192-bit, random)")
+print(f"  Ciphertext: {enc[24:56].hex()}…")
+print(f"  Decrypted : {dec.decode()}")
+print(f"  ✓ XChaCha20-Poly1305 PASSED\n")
 
 ```
 print("  Tamper detection test...")
@@ -807,5 +807,5 @@ print("  The Christman AI Project | Powered by Luma Cognify AI")
 print("═"*78)
 ```
 
-if **name** == “**main**”:
+if **name** == "**main**":
 run_tests()
