@@ -16,4 +16,4 @@ class MemoryEngine:
         pass
 
     def get_status(self):
-        return {"status": "operational", "hipaa_compliant": True, "encryption": "ACTIVE"}
+        return {"status": "operational", "encryption": "ACTIVE"}
