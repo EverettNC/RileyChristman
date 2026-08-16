@@ -59,7 +59,8 @@ class NeuroSymbolicOrchestrator:
             return {"signal_level": 0, "mode": "empty", "dominant_hz": 0, "rms": 0.0}
 
         audio_array /= 32768.0
-        sample_rate = 16000  # assumed PCM 16kHz
+        sample_rate = 16000  # ASSUMED, not measured. If the source is 44.1k/48k
+                             # every dominant_hz below is wrong by ~2.75-3x.
 
         # RMS energy
         rms = float(np.sqrt(np.mean(audio_array ** 2)))
@@ -114,12 +115,19 @@ class NeuroSymbolicOrchestrator:
                 "Vector8":  sum(1 for w in ["calculate","reason","logic","data","fact"] if w in low),
                 "Quantum":  sum(1 for w in ["love","grief","miss","broken","legacy","family"] if w in low),
             }
-            routing = max(scores, key=scores.get) if any(scores.values()) else "Vector8"
-            valence = 0.95 if scores.get(routing, 0) > 1 else 0.5
+            # No keyword matched. Do NOT default to a specialist — an
+            # unrecognised utterance is not a logic query. Return UNKNOWN and
+            # let the caller decide (escalate to a human).
+            if not any(scores.values()):
+                return {"prediction": "unknown", "score": None, "routing": None,
+                        "specialist_scores": scores,
+                        "reason": "no keyword matched; keyword fallback cannot route"}
+            routing = max(scores, key=scores.get)
+            valence = None  # keyword counts are not a confidence measure
 
         return {
             "prediction": "resonance",
-            "score": float(np.clip(valence, 0.0, 1.0)),
+            "score": (None if valence is None else float(np.clip(valence, 0.0, 1.0))),
             "routing": routing,
             "specialist_scores": {k: round(float(v), 3) for k, v in scores.items()},
         }

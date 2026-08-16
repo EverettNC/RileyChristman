@@ -10,32 +10,33 @@ import numpy as np
 
 class RileyHearing:
     def __init__(self):
-        self.latency = 0.04 # 40ms real-time response
-        self.accuracy = {
-            "anger": 0.94,
-            "joy": 0.91,
-            "sadness": 0.87
-        }
+        # These were never measured. No benchmark, no dataset, no test set.
+        # Left as None so nothing downstream can read them as performance.
+        self.latency = None
+        self.accuracy = {"anger": None, "joy": None, "sadness": None}
         print("👂 Riley is Hearing. Silence is no longer quiet.")
 
     def listen_for_truth(self, vocal_stream):
         """
-        Processes 0.3s vocalizations for fundamental frequency and effort levels.
-        Distinguishes between Regulation (stimming) and Crisis.
+        SCAFFOLD — NOT A DETECTOR.
+
+        This does no signal processing. _extract_carbon_signatures matches
+        substrings in a string; passing real audio falls through to a default
+        that triggers no alert. Do not wire this to anything that acts.
         """
         # Step 1: Analyze Paralinguistics (The sound between words)
         f0, formants, envelope = self._extract_carbon_signatures(vocal_stream)
         
         # Step 2: Specialist Routing (Inferno, AlphaVox, Sierra)
-        # Inferno hears the suicidal signature 30s before action.
+        # Intended: route dissociation to Inferno. Not implemented.
         if envelope == "dissociative_silence":
             return "🚨 INFERNO ALERT: Dissociation detected. Silence is not peace."
             
-        # AlphaVox hears caregiver burnout 14 days out.
+        # Intended: route caregiver fatigue to AlphaVox. Not implemented.
         if formants == "burnout_fatigue":
             return "📉 ALPHAVOX: Caregiver threshold approaching. Support required."
 
-        # Sierra hears abuser tone escalation.
+        # Intended: route suppressed danger to Sierra. Not implemented.
         if f0 == "suppressed_danger":
             return "⚠️ SIERRA: Paralinguistics scream danger. Mother is not 'fine'."
 

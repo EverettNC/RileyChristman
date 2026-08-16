@@ -32,7 +32,10 @@ class ToneScoreEngine:
 
     def analyze_tone(self, audio_path: str) -> Dict:
         if not librosa or not audio_path:
-            return {"tone_score": 85, "valence": 50.0, "response_mode": {"mode": "standard"}}
+            # Previously returned 85, which is above the hold_space threshold —
+            # so a missing dependency silently forced hold-space for everyone.
+            return {"tone_score": None, "valence": None,
+                    "response_mode": {"mode": "unavailable", "reason": "librosa missing"}}
 
         # 1. Physics: Pitch, Jitter (stress), Shimmer (exhaustion), HNR (clarity)
         try:
@@ -44,14 +47,20 @@ class ToneScoreEngine:
             arousal = self._compute_arousal(y, jitter)
             valence = self._compute_valence(y, hnr)
             
-            # 3. Composite ToneScore™ (The Christman Standard)
-            # Formula: 0.4×arousal + 0.35×valence + 0.25×emotion_intensity
-            tone_score = (0.4 * arousal) + (0.35 * valence) + (0.25 * 92) # example intensity
-            
+            # 3. Composite ToneScore — cannot be computed until arousal and
+            # valence are real. Refuse rather than return a number.
+            if arousal is None or valence is None:
+                return {
+                    "tone_score": None,
+                    "valence": None,
+                    "response_mode": {"mode": "unavailable",
+                                      "reason": "arousal/valence not implemented"},
+                }
+            tone_score = (0.4 * arousal) + (0.35 * valence)
             return {
                 "tone_score": int(tone_score),
                 "valence": valence,
-                "response_mode": self.adaptive_response_mode(tone_score)
+                "response_mode": self.adaptive_response_mode(tone_score),
             }
         except Exception as e:
             print(f"Audio Analysis Error: {e}")
@@ -62,14 +71,17 @@ class ToneScoreEngine:
         y_h, y_p = librosa.effects.hpss(y)
         return 10 * np.log10(np.mean(y_h**2) / np.mean(y_p**2))
 
-    def _compute_jitter(self, y, sr):
-        # Vocal cord instability under stress logic
-        return 0.05 # Placeholder for your specific jitter algorithm
-
-    def _compute_arousal(self, y, jitter): return 88.0 # Example: High stress
-    def _compute_valence(self, y, hnr): return 22.0 # Example: Negative
+    # UNIMPLEMENTED. These returned fixed constants (0.05 / 88.0 / 22.0), which
+    # made tone_score exactly 65 for every audio file ever passed in, and made
+    # hold_space (>75) unreachable. They now return None so the caller must
+    # refuse rather than score.
+    def _compute_jitter(self, y, sr):  return None
+    def _compute_arousal(self, y, jitter): return None
+    def _compute_valence(self, y, hnr):    return None
 
     def adaptive_response_mode(self, score):
+        if score is None:
+            return {"mode": "unavailable", "reason": "no tone score"}
         if score > 75: return {"mode": "hold_space", "cadence": "slower", "validation": "frequent"}
         return {"mode": "standard"}
 

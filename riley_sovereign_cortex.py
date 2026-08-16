@@ -2,7 +2,8 @@
 RILEY CHRISTMAN: SOVEREIGN RESEARCH CORTEX
 ==========================================
 Status: Sovereign | Tier: PhD-Investigator
-Standard: 96% Quality | Protocol: HIPAA-PHI Secure
+Standard: 96% Quality
+PHI handling: NOT certified. No HIPAA attestation exists for this module.
 """
 
 import logging
@@ -37,11 +38,13 @@ class RileySovereignCortex:
         The Sovereign Loop: Secure -> Infer -> Discover -> Learn
         """
         try:
-            # Step A: Security Validation
-            # self.security.validate_neural_pathway("CORTEX", "REASONING", "RESEARCH_DATA") 
-            # (Mocking success if method signature differs)
+            # Step A: Security Validation — NOT RUN.
+            # validate_neural_pathway is not called. Until it is, this method
+            # performs no security check and must not report one.
             
             # Step B: Infer Empathy (The Inferno Kernel Leakage)
+            # NOTE: synthetic input. This is random noise, not a real trauma
+            # signal. Any Empathy_Trace derived from it is meaningless.
             trauma_signal = np.random.randn(128).astype(np.float32)
             empathy_status, trace = self.soul_forge.infer_empathy(trauma_signal)
             
@@ -60,7 +63,7 @@ class RileySovereignCortex:
             return {
                 "Analysis": discovery.get('derek_analysis', 'Analyzed'),
                 "Hypotheses": discovery.get('generated_hypotheses', []),
-                "Security_Status": "MAXIMUM_SECURITY_VERIFIED",
+                "Security_Status": "NOT_VERIFIED: validation call is disabled",
                 "Meaning_Resonance": "AlphaVox Resonance: Active",
                 "Empathy_Trace": trace
             }

@@ -1,7 +1,9 @@
 """
 Nonverbal Expertiser: Clinical Context Library
 Standard: 96% Quality Threshold
-References: Lord et al., 2023, and other clinical data.
+NOTE: the reference strings below are attributions carried from source
+material and have NOT been checked against the cited papers. Do not present
+them as verified citations.
 """
 import random
 
@@ -38,8 +40,9 @@ class NonverbalExpertise:
                  "references": self.clinical_db["distressed_hum"]["references"]
              }
         
-        # Default Logic for Unknowns
-        return {"error": "No specific context found."}
+        # NOTE: only "distress"/"hum" can match, so the autism_nonverbal and
+        # eye_tracking entries above are currently unreachable.
+        return {"error": "No specific context found.", "topic": None}
 
     def get_random_fact(self):
         return random.choice(self.random_facts)
